@@ -10,6 +10,7 @@ import warnings
 
 import numpy as np
 
+from skfolio.base import validate_asset_panel
 from skfolio.containers import MISSING_CATEGORY_CODE, AssetPanel
 from skfolio.descriptor._base import BaseDescriptor
 from skfolio.typing import FloatArray, IntArray
@@ -19,7 +20,6 @@ from skfolio.utils.tools import (
     _validate_positive_real,
     half_life_to_decay_factor,
 )
-from skfolio.utils.validation import validate_asset_panel
 
 _FITTED_ATTR = "market_beta_"
 

@@ -10,14 +10,17 @@ from abc import ABC
 
 import numpy as np
 
-from skfolio.base import BaseAssetPanelTransformer, BaseComposition
+from skfolio.base import (
+    BaseAssetPanelTransformer,
+    BaseComposition,
+    validate_asset_panel,
+)
 from skfolio.containers import AssetPanel
 from skfolio.typing import BoolArray, FloatArray
 from skfolio.utils.tools import (
     _validate_non_negative_integer,
     _validate_positive_integer,
 )
-from skfolio.utils.validation import validate_asset_panel
 
 __all__ = ["BaseDescriptor"]
 

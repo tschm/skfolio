@@ -221,6 +221,16 @@ Classes
     base.BaseAssetPanelTransformer
     base.BaseComposition
 
+Functions
+---------
+.. currentmodule:: skfolio
+
+.. autosummary::
+    :toctree: generated/
+    :template: function.rst
+
+    base.validate_asset_panel
+
 
 .. _optimization_base_ref:
 

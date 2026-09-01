@@ -11,6 +11,7 @@ import warnings
 import numpy as np
 import sklearn.utils.metadata_routing as skm
 
+from skfolio.base import validate_asset_panel
 from skfolio.containers import AssetPanel
 from skfolio.descriptor._base import BaseDescriptor
 from skfolio.typing import FloatArray
@@ -20,7 +21,6 @@ from skfolio.utils.tools import (
     _validate_positive_real,
     half_life_to_decay_factor,
 )
-from skfolio.utils.validation import validate_asset_panel
 
 _FITTED_ATTR = "macro_sensitivity_"
 

@@ -8,10 +8,10 @@ from __future__ import annotations
 
 import numpy as np
 
+from skfolio.base import validate_asset_panel
 from skfolio.containers import AssetPanel
 from skfolio.descriptor._base import BaseDescriptor
 from skfolio.typing import FloatArray
-from skfolio.utils.validation import validate_asset_panel
 
 
 class LogMarketCap(BaseDescriptor, stateless=True):

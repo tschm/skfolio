@@ -13,6 +13,7 @@ import sklearn.utils.parallel as skp
 
 import skfolio.typing as skt
 from skfolio._constants import _BENCHMARK_WEIGHTS, _PASSTHROUGH
+from skfolio.base import validate_asset_panel
 from skfolio.containers import AssetPanel
 from skfolio.descriptor import BaseDescriptor
 from skfolio.descriptor._base import BaseDescriptorComposition
@@ -29,7 +30,6 @@ from skfolio.utils.tools import (
     call_asset_panel_transform,
     check_estimator,
 )
-from skfolio.utils.validation import validate_asset_panel
 
 _FITTED_ATTR = "descriptors_"
 
