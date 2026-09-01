@@ -191,7 +191,7 @@ class MultipleRandomizedCV:
       Test:   size=69
       Assets: columns=[ 7 10 14]
     >>> print(f"Path ids: {cv.get_path_ids()}")
-    [0 0 0 1 1 1]
+    Path ids: [0 0 0 1 1 1]
     """
 
     if TYPE_CHECKING:

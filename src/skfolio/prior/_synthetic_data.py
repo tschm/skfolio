@@ -84,7 +84,9 @@ class SyntheticData(BasePrior):
     >>> # Instantiate the SyntheticData model and fit it
     >>> model = SyntheticData()
     >>> model.fit(X)
+    SyntheticData()
     >>> print(model.return_distribution_)
+    ReturnDistribution(...)
     >>>
     >>> # Minimum CVaR optimization on synthetic returns
     >>> model = MeanRisk(
@@ -95,7 +97,13 @@ class SyntheticData(BasePrior):
     ...    )
     ... )
     >>> model.fit(X)
-    >>> print(model.weights_)
+    MeanRisk(prior_estimator=SyntheticData(distribution_estimator=VineCopula(log_transform=True,
+                                                                             n_jobs=-1),
+                                           n_samples=2000),
+             risk_measure=CVaR)
+    >>> print(model.weights_.round(4))
+    [0.0331 0.     0.     0.     0.     0.     0.0009 0.1598 0.048  0.0636
+     0.0322 0.0297 0.     0.     0.1463 0.1396 0.0013 0.0144 0.2196 0.1113]
     >>>
     >>> # Minimum CVaR optimization on Stressed Factors
     >>> factor_model = TimeSeriesFactorModel(
@@ -111,13 +119,31 @@ class SyntheticData(BasePrior):
     ... )
     >>> model = MeanRisk(risk_measure=RiskMeasure.CVAR, prior_estimator=factor_model)
     >>> model.fit(X, factors=factors)
-    >>> print(model.weights_)
+    MeanRisk(prior_estimator=TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
+                                                                                                                          log_transform=True,
+                                                                                                                          n_jobs=-1),
+                                                                                        n_samples=5000,
+                                                                                        sample_args={'conditioning': {'QUAL': -0.2}})),
+             risk_measure=CVaR)
+    >>> print(model.weights_.round(4))
+    [0.     0.     0.     0.     0.     0.     0.     0.     0.     0.
+     0.     0.     0.     0.     0.     0.     0.0614 0.     0.9386 0.    ]
     >>>
     >>> # Stress Test the Portfolio
     >>> factor_model.set_params(factor_prior_estimator__sample_args=dict(
     ...     conditioning={"QUAL": -0.5}
     ... ))
+    TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
+                                                                                                 log_transform=True,
+                                                                                                 n_jobs=-1),
+                                                               n_samples=5000,
+                                                               sample_args={'conditioning': {'QUAL': -0.5}}))
     >>> factor_model.fit(X, factors=factors)
+    TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
+                                                                                                 log_transform=True,
+                                                                                                 n_jobs=-1),
+                                                               n_samples=5000,
+                                                               sample_args={'conditioning': {'QUAL': -0.5}}))
     >>> stressed_dist = factor_model.return_distribution_
     >>> stressed_ptf = model.predict(stressed_dist)
     """

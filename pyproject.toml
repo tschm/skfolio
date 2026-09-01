@@ -169,7 +169,10 @@ doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "ELLIPSIS",
 ]
+# `--doctest-modules` applies to the whole source root, so every docstring example
+# is executed and its documented output verified. Examples that cannot be verified
+# yet are listed, with reasons, in `src/skfolio/conftest.py`.
 testpaths = [
     "tests",
-    "src/skfolio/distribution",
+    "src",
 ]

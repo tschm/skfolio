@@ -70,6 +70,7 @@ class EmpiricalVariance(BaseVariance):
     >>> X = prices_to_returns(prices)
     >>> model = EmpiricalVariance()
     >>> model.fit(X)
+    EmpiricalVariance()
     >>> print(model.variance_[:5])
     """
 

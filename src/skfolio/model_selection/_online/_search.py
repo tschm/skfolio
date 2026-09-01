@@ -605,7 +605,7 @@ class OnlineGridSearch(BaseOnlineSearch):
     ...         covariance_estimator=EWCovariance(),
     ...     ),
     ... )
-    >>> search = OnlineGridSearch(  # doctest: +SKIP
+    >>> search = OnlineGridSearch(
     ...     model,
     ...     param_grid={
     ...         "prior_estimator__mu_estimator__half_life": [20, 40, 60],
@@ -615,9 +615,12 @@ class OnlineGridSearch(BaseOnlineSearch):
     ...     test_size=5,
     ...     n_jobs=-1,
     ... )
-    >>> search.fit(X)  # doctest: +SKIP
-    >>> search.best_params_  # doctest: +SKIP
-    >>> search.best_estimator_  # doctest: +SKIP
+    >>> search.fit(X)
+    OnlineGridSearch(...)
+    >>> search.best_params_
+    {'prior_estimator__covariance_estimator__half_life': 40, 'prior_estimator__mu_estimator__half_life': 20}
+    >>> search.best_estimator_
+    MeanRisk(...)
     """
 
     def __init__(
@@ -861,7 +864,7 @@ class OnlineRandomizedSearch(BaseOnlineSearch):
     ...         covariance_estimator=EWCovariance(),
     ...     ),
     ... )
-    >>> search = OnlineRandomizedSearch(  # doctest: +SKIP
+    >>> search = OnlineRandomizedSearch(
     ...     model,
     ...     param_distributions={
     ...         "prior_estimator__mu_estimator__half_life": uniform(10, 90),
@@ -873,9 +876,11 @@ class OnlineRandomizedSearch(BaseOnlineSearch):
     ...     n_jobs=-1,
     ...     random_state=42,
     ... )
-    >>> search.fit(X)  # doctest: +SKIP
-    >>> search.best_params_  # doctest: +SKIP
-    >>> search.best_estimator_  # doctest: +SKIP
+    >>> search.fit(X)
+    OnlineRandomizedSearch(...)
+    >>> search.best_params_
+    >>> search.best_estimator_
+    MeanRisk(...)
     """
 
     def __init__(

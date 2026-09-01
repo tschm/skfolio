@@ -728,6 +728,7 @@ class CharacteristicsFactorModel(BasePrior, BaseComposition):
     ...     n_jobs=-1,
     ... )
     >>> model.fit(characteristics=characteristics)
+    CharacteristicsFactorModel(...)
     >>>
     >>> # Inspect the fitted factor model and diagnostics.
     >>> fm = model.factor_model_
@@ -741,8 +742,10 @@ class CharacteristicsFactorModel(BasePrior, BaseComposition):
     Use :meth:`partial_fit` for online updates:
 
     >>> model.fit(characteristics=characteristics[:400])
+    CharacteristicsFactorModel(...)
     >>> for start in range(400, len(characteristics), 5):
     ...     model.partial_fit(characteristics=characteristics[start : start + 5])
+    CharacteristicsFactorModel(...)
     """
 
     # Request `characteristics` by default when this estimator is used inside a sklearn

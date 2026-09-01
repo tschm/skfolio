@@ -152,15 +152,17 @@ def online_covariance_forecast_evaluation(
     >>>
     >>> prices = load_sp500_dataset()
     >>> X = prices_to_returns(prices)
-    >>> evaluation = online_covariance_forecast_evaluation(  # doctest: +SKIP
+    >>> evaluation = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=60),
     ...     X,
     ...     warmup_size=252,
     ...     test_size=5,
     ... )
-    >>> evaluation.summary()  # doctest: +SKIP
-    >>> evaluation.bias_statistic  # doctest: +SKIP
-    >>> evaluation.plot_calibration()  # doctest: +SKIP
+    >>> evaluation.summary()
+    >>> evaluation.bias_statistic
+    array(...)
+    >>> evaluation.plot_calibration()
+    Figure(...)
     """
     _validate_online_estimator(
         estimator,

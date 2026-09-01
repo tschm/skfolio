@@ -189,12 +189,15 @@ def load_sp500_dataset() -> pd.DataFrame:
     >>> from skfolio.datasets import load_sp500_dataset
     >>> prices = load_sp500_dataset()
     >>> prices.head()
-                    AAPL     AMD       BAC  ...       UNH       WMT      XOM
+                 AAPL    AMD    BAC    BBY  ...    RRC    UNH    WMT    XOM
+    Date                                    ...
     1990-01-02  0.264  4.125  4.599  0.144  ...  3.322  0.310  3.653  4.068
     1990-01-03  0.266  4.000  4.636  0.161  ...  3.322  0.304  3.653  4.027
     1990-01-04  0.267  3.938  4.537  0.159  ...  3.322  0.301  3.634  3.987
     1990-01-05  0.268  3.812  4.438  0.159  ...  3.322  0.288  3.595  3.966
     1990-01-08  0.269  3.812  4.463  0.147  ...  3.322  0.282  3.644  4.027
+    <BLANKLINE>
+    [5 rows x 20 columns]
     """
     data_filename = "sp500_dataset.csv.gz"
     df = load_gzip_compressed_csv_data(data_filename)
@@ -335,6 +338,8 @@ def load_ftse100_dataset(data_home=None, download_if_missing=True) -> pd.DataFra
     2000-01-06  553.289  229.048  95.581  40.452  ...  66.950  124.220  458.119  386.337
     2000-01-07  572.829  222.220  95.581  40.452  ...  70.716  121.725  475.283  405.046
     2000-01-10  578.852  224.548  92.711  40.685  ...  74.285  121.476  498.254  392.885
+    <BLANKLINE>
+    [5 rows x 64 columns]
     """
     data_filename = "ftse100_dataset"
     df = download_dataset(
@@ -387,6 +392,8 @@ def load_nasdaq_dataset(data_home=None, download_if_missing=True) -> pd.DataFram
     2018-01-04  51.336  38.38  36.103  41.495  ...  78.4  8.430  12.700  2.869
     2018-01-05  51.316  38.89  36.681  41.967  ...  77.6  8.400  12.495  2.780
     2018-01-08  50.809  38.37  36.103  41.811  ...  82.4  8.310  12.550  2.825
+    <BLANKLINE>
+    [5 rows x 1455 columns]
     """
     data_filename = "nasdaq_dataset"
     df = download_dataset(
@@ -434,14 +441,16 @@ def load_sp500_implied_vol_dataset(
     --------
     >>> from skfolio.datasets import load_sp500_implied_vol_dataset
     >>> implied_vol = load_sp500_implied_vol_dataset()
-    >>> implied_vol.head()
-                    AAPL       AMD       BAC  ...       UNH       WMT       XOM
-    Date                                      ...
-    2010-01-04  0.364353  0.572056  0.382926  ...  0.362751  0.171737  0.201485
-    2010-01-05  0.371865  0.568791  0.374699  ...  0.368504  0.174764  0.203852
-    2010-01-06  0.356746  0.558054  0.349220  ...  0.368514  0.171892  0.197475
-    2010-01-07  0.361084  0.560475  0.354942  ...  0.355792  0.169083  0.200046
-    2010-01-08  0.348085  0.543932  0.360345  ...  0.351130  0.170897  0.204832
+    >>> implied_vol.head().round(4)
+                  AAPL     AMD     BAC     BBY  ...     RRC     UNH     WMT     XOM
+    Date                                        ...
+    2010-01-04  0.3644  0.5721  0.3829  0.3309  ...  0.4081  0.3628  0.1717  0.2015
+    2010-01-05  0.3719  0.5688  0.3747  0.3221  ...  0.3998  0.3685  0.1748  0.2039
+    2010-01-06  0.3567  0.5581  0.3492  0.3212  ...  0.3946  0.3685  0.1719  0.1975
+    2010-01-07  0.3611  0.5605  0.3549  0.3163  ...  0.3956  0.3558  0.1691  0.2000
+    2010-01-08  0.3481  0.5439  0.3603  0.3144  ...  0.3918  0.3511  0.1709  0.2048
+    <BLANKLINE>
+    [5 rows x 20 columns]
     """
     data_filename = "sp500_implied_vol_dataset"
     df = download_dataset(

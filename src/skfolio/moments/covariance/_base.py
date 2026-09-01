@@ -149,13 +149,16 @@ class BaseCovariance(skb.BaseEstimator, ABC):
         --------
         >>> import numpy as np
         >>> from skfolio.moments import EmpiricalCovariance, LedoitWolf
+        >>> np.random.seed(0)
         >>> X_train = np.random.randn(100, 5)
         >>> X_test = np.random.randn(50, 5)
         >>> emp = EmpiricalCovariance().fit(X_train)
         >>> lw = LedoitWolf().fit(X_train)
         >>> # Compare models on held-out data
         >>> print(f"Empirical: {emp.score(X_test):.2f}")
+        Empirical: -7.27
         >>> print(f"LedoitWolf: {lw.score(X_test):.2f}")
+        LedoitWolf: -7.19
         """
         skv.check_is_fitted(self, "covariance_")
         X_test = skv.validate_data(
@@ -238,12 +241,15 @@ class BaseCovariance(skb.BaseEstimator, ABC):
         --------
         >>> import numpy as np
         >>> from skfolio.moments import EmpiricalCovariance
+        >>> np.random.seed(0)
         >>> X = np.random.randn(100, 3)
         >>> model = EmpiricalCovariance()
         >>> model.fit(X)
+        EmpiricalCovariance()
         >>> distances = model.mahalanobis(X)
         >>> # Distances follow approximately chi-squared distribution with n_assets DoF
         >>> print(f"Mean distance: {distances.mean():.2f}, Expected: {3:.2f}")
+        Mean distance: 2.97, Expected: 3.00
         """
         skv.check_is_fitted(self, "covariance_")
 

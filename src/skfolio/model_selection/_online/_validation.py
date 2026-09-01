@@ -375,7 +375,7 @@ def online_score(
     ...         covariance_estimator=EWCovariance(half_life=40),
     ...     ),
     ... )
-    >>> score = online_score(  # doctest: +SKIP
+    >>> score = online_score(
     ...     model,
     ...     X,
     ...     warmup_size=252,

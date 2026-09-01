@@ -161,13 +161,13 @@ class CovarianceForecastEvaluation:
     >>> from skfolio.model_selection import online_covariance_forecast_evaluation
     >>> from skfolio.moments import EWCovariance
     >>>
-    >>> evaluation = online_covariance_forecast_evaluation(  # doctest: +SKIP
+    >>> evaluation = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30),
     ...     X,
     ...     warmup_size=252,
     ... )
-    >>> evaluation.summary()  # doctest: +SKIP
-    >>> evaluation.plot_calibration()  # doctest: +SKIP
+    >>> evaluation.summary()
+    >>> evaluation.plot_calibration()
     """
 
     observations: FloatArray
@@ -522,18 +522,18 @@ class CovarianceForecastComparison:
     ... )
     >>> from skfolio.moments import EWCovariance
     >>>
-    >>> evaluatio_30 = online_covariance_forecast_evaluation(  # doctest: +SKIP
+    >>> evaluatio_30 = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30), X, warmup_size=252,
     ... )
-    >>> evaluatio_60 = online_covariance_forecast_evaluation(  # doctest: +SKIP
+    >>> evaluatio_60 = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=60), X, warmup_size=252,
     ... )
-    >>> comparison = CovarianceForecastComparison(  # doctest: +SKIP
+    >>> comparison = CovarianceForecastComparison(
     ...     [evaluatio_30, evaluatio_60],
     ...     names=["EWCov(30)", "EWCov(60)"],
     ... )
-    >>> comparison.summary()  # doctest: +SKIP
-    >>> comparison.plot_calibration()  # doctest: +SKIP
+    >>> comparison.summary()
+    >>> comparison.plot_calibration()
     """
 
     evaluations: list[CovarianceForecastEvaluation]
@@ -926,15 +926,17 @@ def covariance_forecast_evaluation(
     >>>
     >>> prices = load_sp500_dataset()
     >>> X = prices_to_returns(prices)
-    >>> evaluation = covariance_forecast_evaluation(  # doctest: +SKIP
+    >>> evaluation = covariance_forecast_evaluation(
     ...     LedoitWolf(),
     ...     X,
     ...     train_size=252,
     ...     test_size=5,
     ... )
-    >>> evaluation.summary()  # doctest: +SKIP
-    >>> evaluation.bias_statistic  # doctest: +SKIP
-    >>> evaluation.plot_calibration()  # doctest: +SKIP
+    >>> evaluation.summary()
+    >>> evaluation.bias_statistic
+    array(...)
+    >>> evaluation.plot_calibration()
+    Figure(...)
     """
     estimator = sk.clone(estimator)
     X, y = sku.indexable(X, y)

@@ -325,6 +325,7 @@ class EWSharpeOptimalAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     ...     third_axis_name="factors",
     ...     third_axis_labels=["market", "beta", "size"],
     ... )
+    AssetPanel(n_observations=2520, n_assets=500, n_fields=25)
     >>>
     >>> alpha_model = EWSharpeOptimalAlpha(
     ...     descriptors=[
@@ -341,6 +342,12 @@ class EWSharpeOptimalAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     >>>
     >>> # Latest alpha forecast for the current rebalance.
     >>> alpha_model.fit(X)
+    EWSharpeOptimalAlpha(descriptors=[('momentum', EWMomentum()),
+                                      ('book_to_price', BookToPrice()),
+                                      ('reversal', Reversal()),
+                                      ('eps_ntm', Passthrough(field='eps_ntm'))],
+                         forecast_unit=IDIO_SHARPE, half_life=21, horizon=5,
+                         neutralize_against=['market', 'beta', 'size'])
     >>> print(alpha_model.alpha_)
     >>>
     >>> # Online learning with partial_fit
