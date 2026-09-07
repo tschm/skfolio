@@ -464,7 +464,7 @@ class RegimeAdjustedEWCovariance(BaseCovariance):
     >>> model = RegimeAdjustedEWCovariance(half_life=23)
     >>> model.fit(X)
     RegimeAdjustedEWCovariance(half_life=23)
-    >>> print(model.regime_multiplier_.round(4))
+    >>> print(model.regime_multiplier_)
     0.8696
     >>>
     >>> # DIAGONAL target (individual asset volatilities)

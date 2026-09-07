@@ -98,7 +98,7 @@ def pytest_collection_modifyitems(items) -> None:
 
 
 @pytest.fixture(autouse=True)
-def _pristine_global_state():
+def _pristine_global_state(tmp_path, monkeypatch):
     """Run every doctest under the global state a reader of the docs would have.
 
     `tests/conftest.py` sets `np.set_printoptions(suppress=True, precision=6)` for the
@@ -107,8 +107,13 @@ def _pristine_global_state():
     documented output is rendered -- but someone reading the published API docs has
     neither setting, so the examples must be verified against the defaults.
 
+    Each example also runs in its own directory. Examples that write files name them
+    relatively (`AssetPanel.save("asset_panel")`), so without this they would litter
+    the working tree and fail on the second run against a directory left by the first.
+
     Only doctests are collected under this directory, so the fixture needs no guard.
     """
+    monkeypatch.chdir(tmp_path)
     with (
         np.printoptions(precision=8, suppress=False),
         sklearn.config_context(transform_output="default"),

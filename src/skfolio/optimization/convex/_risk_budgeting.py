@@ -472,7 +472,7 @@ class RiskBudgeting(ConvexOptimization):
     >>> model = RiskBudgeting(risk_measure=RiskMeasure.VARIANCE)
     >>> model.fit(X)
     RiskBudgeting()
-    >>> print(model.weights_.round(4))
+    >>> print(model.weights_)
     [0.0422 0.0314 0.0343 0.0381 0.0541 0.0432 0.0441 0.0666 0.0358 0.0653
      0.0547 0.0548 0.0451 0.0655 0.0534 0.0691 0.0381 0.0473 0.0603 0.0565]
     >>>
@@ -492,12 +492,12 @@ class RiskBudgeting(ConvexOptimization):
                                'MSFT': 1.0, 'PEP': 1.0, 'PFE': 1.0, 'PG': 1.0,
                                'RRC': 1.0, 'UNH': 1.0, 'WMT': 1.0, 'XOM': 1.0},
                   risk_measure=CVaR)
-    >>> print(model.weights_.round(4))
+    >>> print(model.weights_)
     [0.0623 0.0319 0.0347 0.0404 0.0565 0.0091 0.0466 0.0694 0.0079 0.0665
      0.0572 0.0571 0.047  0.0691 0.0559 0.0708 0.0421 0.0502 0.0659 0.0595]
     >>>
     >>> portfolio = model.predict(X)
-    >>> print(f"{portfolio.cvar:.4f}")
+    >>> print(portfolio.cvar)
     0.0251
 
     References

@@ -165,9 +165,16 @@ addopts = [
     "-n=4",
     "--dist=worksteal",
 ]
+# `NUMBER` compares floats to the precision written in the expected output rather
+# than as literal text. Convex-solver results drift in their last digits across BLAS
+# and CPU architecture, and asserting them verbatim is a knife edge: a value sitting
+# near a rounding boundary flips its final digit and the example fails. Examples
+# therefore document the rounded value while the unrounded one is compared with a
+# 10**-precision tolerance, which leaves half a last digit of margin at every site.
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "ELLIPSIS",
+    "NUMBER",
 ]
 # `--doctest-modules` applies to the whole source root, so every docstring example
 # is executed and its documented output verified. Examples that cannot be verified
