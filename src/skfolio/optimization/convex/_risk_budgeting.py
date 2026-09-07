@@ -474,7 +474,7 @@ class RiskBudgeting(ConvexOptimization):
     RiskBudgeting()
     >>> print(model.weights_)
     [0.0422 0.0314 0.0343 0.0381 0.0541 0.0432 0.0441 0.0666 0.0358 0.0653
-     0.0547 0.0548 0.0451 0.0655 0.0534 0.0691 0.0381 0.0473 0.0603 0.0565]
+     0.0547 0.0548 0.0451 0.0655 0.0534 0.0691 0.0381 0.0473 0.0603 0.0565...]
     >>>
     >>> # CVaR risk budgeting with custom asset budgets
     >>> risk_budget = {asset: 1.0 for asset in X.columns}
@@ -494,7 +494,7 @@ class RiskBudgeting(ConvexOptimization):
                   risk_measure=CVaR)
     >>> print(model.weights_)
     [0.0623 0.0319 0.0347 0.0404 0.0565 0.0091 0.0466 0.0694 0.0079 0.0665
-     0.0572 0.0571 0.047  0.0691 0.0559 0.0708 0.0421 0.0502 0.0659 0.0595]
+     0.0572 0.0571 0.047  0.0691 0.0559 0.0708 0.0421 0.0502 0.0659 0.0595...]
     >>>
     >>> portfolio = model.predict(X)
     >>> print(portfolio.cvar)

@@ -344,7 +344,7 @@ class DistributionallyRobustCVaR(ConvexOptimization):
     DistributionallyRobustCVaR(wasserstein_ball_radius=0.01)
     >>> print(model.weights_)
     [0.0593 0.     0.     0.0593 0.0507 0.     0.0593 0.0593 0.0593 0.0593
-     0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593]
+     0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593 0.0593...]
     >>>
     >>> # Increasing the radius increases the uncertainty around the distribution,
     >>> # which brings the weights closer to equal weighting
@@ -353,7 +353,7 @@ class DistributionallyRobustCVaR(ConvexOptimization):
     DistributionallyRobustCVaR(wasserstein_ball_radius=0.1)
     >>> print(model.weights_)
     [0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05
-     0.05 0.05 0.05 0.05 0.05 0.05]
+     0.05 0.05 0.05 0.05 0.05 0.05...]
 
     References
     ----------

@@ -726,7 +726,7 @@ class MeanRisk(ConvexOptimization):
     MeanRisk()
     >>> print(model.weights_)
     [0.026  0.     0.     0.0069 0.0716 0.     0.     0.1979 0.     0.1208
-     0.03   0.0211 0.01   0.1137 0.0118 0.1658 0.0099 0.0097 0.1157 0.0892]
+     0.03   0.0211 0.01   0.1137 0.0118 0.1658 0.0099 0.0097 0.1157 0.0892...]
     >>>
     >>> # Maximum Sharpe Ratio optimization
     >>> model = MeanRisk(
@@ -750,7 +750,7 @@ class MeanRisk(ConvexOptimization):
              max_weights=0.2, risk_measure=CVaR)
     >>> print(model.weights_)
     [0.0112 0.     0.0147 0.     0.0268 0.     0.     0.2    0.1353 0.0699
-     0.007  0.     0.     0.1613 0.0024 0.1712 0.0064 0.     0.1103 0.0834]
+     0.007  0.     0.     0.1613 0.0024 0.1712 0.0064 0.     0.1103 0.0834...]
     >>>
     >>> # Compute portfolios along the mean-variance efficient frontier
     >>> model = MeanRisk(
