@@ -98,7 +98,7 @@ def pytest_collection_modifyitems(items) -> None:
 
 
 @pytest.fixture(autouse=True)
-def _pristine_global_state(request):
+def _pristine_global_state():
     """Run every doctest under the global state a reader of the docs would have.
 
     `tests/conftest.py` sets `np.set_printoptions(suppress=True, precision=6)` for the
@@ -106,10 +106,9 @@ def _pristine_global_state(request):
     restoring it. Both leak into any doctest that runs afterwards and change how the
     documented output is rendered -- but someone reading the published API docs has
     neither setting, so the examples must be verified against the defaults.
+
+    Only doctests are collected under this directory, so the fixture needs no guard.
     """
-    if not isinstance(request.node, DoctestItem):
-        yield
-        return
     with (
         np.printoptions(precision=8, suppress=False),
         sklearn.config_context(transform_output="default"),
