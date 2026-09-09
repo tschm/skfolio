@@ -205,7 +205,12 @@ class OpinionPooling(BasePrior, BaseComposition):
     ...     prior_estimator=opinion_pooling
     ... )
     >>> model.fit(X)
+    RiskBudgeting(...)
     >>> print(model.weights_)
+    [0.0412... 0.0319... 0.0299... 0.0447... 0.0382... 0.0334...
+     0.0349... 0.0772... 0.0329... 0.0672... 0.0599... 0.0574...
+     0.0402... 0.0567... 0.0591... 0.0775... 0.0531... 0.0383...
+     0.0752... 0.0500...]
     >>>
     >>> # Stress Test the Portfolio
     >>> opinion_1 = EntropyPooling(cvar_views=["AMD == 0.05"])

@@ -1,15 +1,20 @@
 from __future__ import annotations
 
+import warnings
+
+import cvxpy as cp
 import numpy as np
 import pytest
 from sklearn import config_context
 
 from skfolio import RiskMeasure
+from skfolio.datasets import load_sp500_dataset
 from skfolio.moments import ImpliedCovariance
 from skfolio.optimization.convex import (
     RiskBudgeting,
 )
-from skfolio.prior import EmpiricalPrior, TimeSeriesFactorModel
+from skfolio.preprocessing import prices_to_returns
+from skfolio.prior import EmpiricalPrior, EntropyPooling, TimeSeriesFactorModel
 
 
 @pytest.fixture(scope="module")
@@ -291,3 +296,84 @@ def test_risk_budgeting_negative_weight_constraints(X_small):
         ),
     ):
         model.fit(X_small)
+
+
+@pytest.fixture(scope="module")
+def X_full():
+    """The full price history, unsliced.
+
+    The CLARABEL stall these tests cover needs the whole sample: the shorter windows
+    the other fixtures use are not ill-conditioned enough to reproduce it.
+    """
+    return prices_to_returns(load_sp500_dataset())
+
+
+@pytest.fixture(scope="module")
+def concentrated_prior():
+    """A prior whose `sample_weight` is concentrated enough to stall CLARABEL.
+
+    The entropy pooling views reweight the scenarios so heavily that the CVaR risk
+    budgeting problem, though bounded and feasible, freezes CLARABEL's interior point
+    iterations in `InsufficientProgress`. See issue #292.
+    """
+    return EntropyPooling(
+        mean_views=["AMD >= BAC", "JPM <= prior(JPM) * 0.8"],
+        cvar_views=["GE == 0.12"],
+    )
+
+
+def test_cvar_falls_back_when_clarabel_stalls(X_full, concentrated_prior):
+    """CLARABEL stalls on this problem and the retry with SCS recovers it."""
+    model = RiskBudgeting(
+        risk_measure=RiskMeasure.CVAR, prior_estimator=concentrated_prior
+    )
+
+    with pytest.warns(
+        UserWarning,
+        match=r"Solver 'CLARABEL' failed\. Retrying with the fallback solver 'SCS'\.",
+    ):
+        model.fit(X_full)
+
+    assert model.solver_ == "SCS"
+    assert model.fallback_ is None
+    np.testing.assert_almost_equal(model.weights_.sum(), 1.0)
+    assert np.all(model.weights_ > 0)
+
+
+def test_solver_reports_the_primary_solver_when_it_succeeds(X_small):
+    """A problem CLARABEL solves is not retried and keeps its own solution."""
+    model = RiskBudgeting(risk_measure=RiskMeasure.CVAR)
+    model.fit(X_small)
+
+    assert model.solver_ == "CLARABEL"
+
+
+def test_no_fallback_when_the_solver_is_already_the_fallback(
+    X_full, concentrated_prior
+):
+    """Choosing the fallback solver explicitly must not retry it a second time."""
+    model = RiskBudgeting(
+        risk_measure=RiskMeasure.CVAR,
+        prior_estimator=concentrated_prior,
+        solver="SCS",
+    )
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", UserWarning)
+        model.fit(X_full)
+
+    assert model.solver_ == "SCS"
+
+
+def test_infeasible_problem_is_not_retried(X_small):
+    """An infeasible problem carries a certificate, so the retry is skipped.
+
+    `min_weights=1.0` on 20 assets cannot meet the unit budget. The error must name
+    the primary solver, not the fallback, and no retry warning may be emitted.
+    """
+    model = RiskBudgeting(min_weights=1.0)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", UserWarning)
+        with pytest.raises(cp.SolverError, match=r"Solver 'CLARABEL' failed"):
+            model.fit(X_small)
