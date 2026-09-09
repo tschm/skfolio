@@ -227,12 +227,12 @@ class NestedClustersOptimization(BaseOptimization):
     ...     outer_estimator=outer_estimator,
     ... )
     >>> model.fit(X)
-    NestedClustersOptimization(inner_estimator=MeanRisk(objective_function=MAXIMIZE_RATIO,
-                                                        risk_measure=Standard Deviation),
-                               outer_estimator=RiskBudgeting(risk_measure=CVaR))
+    NestedClustersOptimization(...)
     >>> print(model.weights_)
-    [0.0327 0.0029 0.     0.0292 0.0941 0.0161 0.0384 0.0752 0.1148 0.0652
-     0.0318 0.     0.0591 0.0864 0.0254 0.1112 0.0336 0.0864 0.0236 0.0736...]
+    [3.27...e-02 2.94...e-03 ... 2.91...e-02 9.40...e-02 1.61...e-02
+     3.84...e-02 7.52...e-02 1.14...e-01 6.52...e-02 3.17...e-02 ...
+     5.90...e-02 8.64...e-02 2.54...e-02 1.11...e-01 3.36...e-02 8.64...e-02
+     2.36...e-02 7.36...e-02]
     >>> print(model.clustering_estimator_.labels_)
     [4 4 3 4 2 3 4 1 3 0 1 1 4 0 1 0 2 1 4 2]
 

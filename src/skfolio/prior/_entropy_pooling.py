@@ -394,10 +394,11 @@ class EntropyPooling(BasePrior):
     >>>
     >>> print(entropy_pooling.relative_entropy_)
     0.18...
-    >>> print(f"{entropy_pooling.effective_number_of_scenarios_:.2f}")
-    6878.98
-    >>> print(entropy_pooling.return_distribution_.sample_weight.round(6))
-    [0.000103...  0.000093... ... 0.000103...  0.000108...]
+    >>> print(entropy_pooling.effective_number_of_scenarios_)
+    6878.97...
+    >>> print(entropy_pooling.return_distribution_.sample_weight)
+    [1.03...e-04 9.40...e-05 8.76...e-05 ... 1.05...e-04 1.03...e-04
+     1.08...e-04]
     >>>
     >>> # CVaR Hierarchical Risk Parity optimization on Entropy Pooling
     >>> model = HierarchicalRiskParity(
@@ -406,8 +407,8 @@ class EntropyPooling(BasePrior):
     ... )
     >>> model.fit(X)
     HierarchicalRiskParity(prior_estimator=...
-    >>> print(model.weights_.round(4))
-    [0.073... 0.0541... ... 0.200...]
+    >>> print(model.weights_)
+    [0.0737... 0.0540... 0.0760... 0.207... 0.0635... 0.324... 0.200...]
     >>>
     >>> # Stress Test the Portfolio
     >>> entropy_pooling = EntropyPooling(cvar_views=["AMD == 0.10"])

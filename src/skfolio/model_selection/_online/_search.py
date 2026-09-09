@@ -879,6 +879,8 @@ class OnlineRandomizedSearch(BaseOnlineSearch):
     >>> search.fit(X)
     OnlineRandomizedSearch(...)
     >>> search.best_params_
+    {'prior_estimator__covariance_estimator__half_life': np.float64(37.38...),
+     'prior_estimator__mu_estimator__half_life': np.float64(57.22...)}
     >>> search.best_estimator_
     MeanRisk(...)
     """

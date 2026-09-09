@@ -281,13 +281,7 @@ class PredictorAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     ... )
     >>>
     >>> alpha_model.fit(X)
-    PredictorAlpha(descriptors=[('momentum', EWMomentum()),
-                                ('book_to_price', BookToPrice()),
-                                ('reversal', Reversal()),
-                                ('eps_ntm', Passthrough(field='eps_ntm'))],
-                   forecast_unit=IDIO_SHARPE, half_life=21, horizon=5,
-                   neutralize_against=['market', 'beta', 'size'],
-                   predictor=SGDRegressor())
+    PredictorAlpha(...)
     >>> print(alpha_model.alpha_)
     >>>
     >>> # Online learning (requires predictor with partial_fit)

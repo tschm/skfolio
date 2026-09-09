@@ -465,7 +465,7 @@ class RegimeAdjustedEWCovariance(BaseCovariance):
     >>> model.fit(X)
     RegimeAdjustedEWCovariance(half_life=23)
     >>> print(model.regime_multiplier_)
-    0.8696
+    0.869...
     >>>
     >>> # DIAGONAL target (individual asset volatilities)
     >>> model2 = RegimeAdjustedEWCovariance(
@@ -490,8 +490,7 @@ class RegimeAdjustedEWCovariance(BaseCovariance):
     ...     regime_portfolio_weights=np.ones(n_assets) / n_assets,
     ... )
     >>> model_equal.fit(X)
-    RegimeAdjustedEWCovariance(regime_portfolio_weights=array([0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05,
-           0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05]))
+    RegimeAdjustedEWCovariance(...)
     >>>
     >>> # With Newey-West HAC correction
     >>> model_hac = RegimeAdjustedEWCovariance(

@@ -158,16 +158,28 @@ class CovarianceForecastEvaluation:
 
     Examples
     --------
+    >>> from skfolio.datasets import load_sp500_dataset
     >>> from skfolio.model_selection import online_covariance_forecast_evaluation
     >>> from skfolio.moments import EWCovariance
+    >>> from skfolio.preprocessing import prices_to_returns
     >>>
+    >>> prices = load_sp500_dataset()
+    >>> X = prices_to_returns(prices)
     >>> evaluation = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30),
     ...     X,
     ...     warmup_size=252,
     ... )
     >>> evaluation.summary()
+                                        mean  ...           target
+    Mahalanobis ratio               1.408...  ...              1.0
+    Diagonal ratio                  1.067...  ...              1.0
+    Portfolio standardized returns  0.070...  ...    mean=0, std=1
+    Portfolio QLIKE                -8.409...  ...  lower is better
+    <BLANKLINE>
+    [4 rows x 7 columns]
     >>> evaluation.plot_calibration()
+    Figure(...)
     """
 
     observations: FloatArray
@@ -516,12 +528,16 @@ class CovarianceForecastComparison:
 
     Examples
     --------
+    >>> from skfolio.datasets import load_sp500_dataset
     >>> from skfolio.model_selection import (
     ...     CovarianceForecastComparison,
     ...     online_covariance_forecast_evaluation,
     ... )
     >>> from skfolio.moments import EWCovariance
+    >>> from skfolio.preprocessing import prices_to_returns
     >>>
+    >>> prices = load_sp500_dataset()
+    >>> X = prices_to_returns(prices)
     >>> evaluatio_30 = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30), X, warmup_size=252,
     ... )
@@ -533,7 +549,16 @@ class CovarianceForecastComparison:
     ...     names=["EWCov(30)", "EWCov(60)"],
     ... )
     >>> comparison.summary()
+    estimator                      EWCov(30)  ...        EWCov(60)
+                                        mean  ...           target
+    Mahalanobis ratio               1.408...  ...              1.0
+    Diagonal ratio                  1.067...  ...              1.0
+    Portfolio standardized returns  0.070...  ...    mean=0, std=1
+    Portfolio QLIKE                -8.409...  ...  lower is better
+    <BLANKLINE>
+    [4 rows x 14 columns]
     >>> comparison.plot_calibration()
+    Figure(...)
     """
 
     evaluations: list[CovarianceForecastEvaluation]
@@ -933,8 +958,15 @@ def covariance_forecast_evaluation(
     ...     test_size=5,
     ... )
     >>> evaluation.summary()
+                                        mean  ...           target
+    Mahalanobis ratio               0.998...  ...              1.0
+    Diagonal ratio                  1.015...  ...              1.0
+    Portfolio standardized returns  0.155...  ...    mean=0, std=1
+    Portfolio QLIKE                -6.560...  ...  lower is better
+    <BLANKLINE>
+    [4 rows x 7 columns]
     >>> evaluation.bias_statistic
-    array(...)
+    array([1.081...])
     >>> evaluation.plot_calibration()
     Figure(...)
     """

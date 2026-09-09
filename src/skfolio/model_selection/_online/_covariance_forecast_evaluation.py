@@ -159,8 +159,15 @@ def online_covariance_forecast_evaluation(
     ...     test_size=5,
     ... )
     >>> evaluation.summary()
+                                        mean  ...           target
+    Mahalanobis ratio               1.190...  ...              1.0
+    Diagonal ratio                  1.031...  ...              1.0
+    Portfolio standardized returns  0.148...  ...    mean=0, std=1
+    Portfolio QLIKE                -6.705...  ...  lower is better
+    <BLANKLINE>
+    [4 rows x 7 columns]
     >>> evaluation.bias_statistic
-    array(...)
+    array([1.008...])
     >>> evaluation.plot_calibration()
     Figure(...)
     """

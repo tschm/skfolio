@@ -247,7 +247,7 @@ class RegimeAdjustedEWVariance(BaseVariance):
     >>> model.fit(X)
     RegimeAdjustedEWVariance(half_life=23)
     >>> print(model.regime_multiplier_)
-    0.8107
+    0.810...
     >>>
     >>> # With LOG method for robustness to outliers
     >>> model2 = RegimeAdjustedEWVariance(

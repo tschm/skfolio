@@ -173,20 +173,17 @@ addopts = [
     "-n=4",
     "--dist=worksteal",
 ]
-# `NUMBER` compares floats to the precision written in the expected output rather
-# than as literal text. Convex-solver results drift in their last digits across BLAS
-# and CPU architecture, and asserting them verbatim is a knife edge: a value sitting
-# near a rounding boundary flips its final digit and the example fails. Examples
-# therefore document the rounded value while the unrounded one is compared with a
-# 10**-precision tolerance, which leaves half a last digit of margin at every site.
+# `ELLIPSIS` is how an example documents a value that is not bit-stable: write the
+# leading digits that are stable across BLAS, CPU architecture and solver version and
+# end with `...` (`0.869...`). That keeps the published example readable and honest
+# about its own precision, without rounding the call itself.
 doctest_optionflags = [
     "NORMALIZE_WHITESPACE",
     "ELLIPSIS",
-    "NUMBER",
 ]
 # `--doctest-modules` applies to the whole source root, so every docstring example
-# is executed and its documented output verified. Examples that cannot be verified
-# yet are listed, with reasons, in `src/skfolio/conftest.py`.
+# is executed and its documented output verified. The few that cannot be are listed,
+# with a reason each, in `SKIPPED` in `src/skfolio/conftest.py`.
 testpaths = [
     "tests",
     "src",

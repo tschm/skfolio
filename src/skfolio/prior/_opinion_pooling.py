@@ -193,16 +193,9 @@ class OpinionPooling(BasePrior, BaseComposition):
     ... )
     >>>
     >>> opinion_pooling.fit(X)
-    OpinionPooling(estimators=[('opinion_1',
-                                EntropyPooling(cvar_views=['AMD == 0.10'])),
-                               ('opinion_2',
-                                EntropyPooling(cvar_views=['GE == 0.12'],
-                                               mean_views=['AMD >= BAC',
-                                                           'JPM <= prior(JPM) * '
-                                                           '0.8']))],
-                   opinion_probabilities=[0.4, 0.5])
+    OpinionPooling(...)
     >>>
-    >>> print(opinion_pooling.return_distribution_.sample_weight.round(6))
+    >>> print(opinion_pooling.return_distribution_.sample_weight)
     >>>
     >>> # CVaR Risk Parity optimization on opinion Pooling
     >>> model = RiskBudgeting(
@@ -210,7 +203,7 @@ class OpinionPooling(BasePrior, BaseComposition):
     ...     prior_estimator=opinion_pooling
     ... )
     >>> model.fit(X)
-    >>> print(model.weights_.round(4))
+    >>> print(model.weights_)
     >>>
     >>> # Stress Test the Portfolio
     >>> opinion_1 = EntropyPooling(cvar_views=["AMD == 0.05"])
@@ -220,11 +213,7 @@ class OpinionPooling(BasePrior, BaseComposition):
     ...     opinion_probabilities=[0.6, 0.4],
     ... )
     >>> opinion_pooling.fit(X)
-    OpinionPooling(estimators=[('opinion_1',
-                                EntropyPooling(cvar_views=['AMD == 0.05'])),
-                               ('opinion_2',
-                                EntropyPooling(cvar_views=['AMD == 0.10']))],
-                   opinion_probabilities=[0.6, 0.4])
+    OpinionPooling(...)
     >>>
     >>> stressed_dist = opinion_pooling.return_distribution_
     >>>

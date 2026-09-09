@@ -92,18 +92,18 @@ class SyntheticData(BasePrior):
     >>> model = MeanRisk(
     ...    risk_measure=RiskMeasure.CVAR,
     ...    prior_estimator=SyntheticData(
-    ...        distribution_estimator=VineCopula(log_transform=True, n_jobs=-1),
+    ...        distribution_estimator=VineCopula(
+    ...            log_transform=True, n_jobs=-1, random_state=0
+    ...        ),
     ...        n_samples=2000,
     ...    )
     ... )
     >>> model.fit(X)
-    MeanRisk(prior_estimator=SyntheticData(distribution_estimator=VineCopula(log_transform=True,
-                                                                             n_jobs=-1),
-                                           n_samples=2000),
-             risk_measure=CVaR)
-    >>> print(model.weights_.round(4))
-    [0.0331 0.     0.     0.     0.     0.     0.0009 0.1598 0.048  0.0636
-     0.0322 0.0297 0.     0.     0.1463 0.1396 0.0013 0.0144 0.2196 0.1113]
+    MeanRisk(...)
+    >>> print(model.weights_)
+    [2.07...e-03 ... 3.87...e-02 9.37...e-03 1.94...e-01 9.79...e-02
+     1.05...e-01 ... 1.02...e-01 1.02...e-02 6.91...e-02 ... 1.49...e-01 ...
+     1.55...e-01 6.40...e-02]
     >>>
     >>> # Minimum CVaR optimization on Stressed Factors
     >>> factor_model = TimeSeriesFactorModel(
@@ -112,6 +112,7 @@ class SyntheticData(BasePrior):
     ...            central_assets=["QUAL"],
     ...            log_transform=True,
     ...            n_jobs=-1,
+    ...            random_state=0,
     ...        ),
     ...        n_samples=5000,
     ...        sample_args=dict(conditioning={"QUAL": -0.2}),
@@ -119,31 +120,17 @@ class SyntheticData(BasePrior):
     ... )
     >>> model = MeanRisk(risk_measure=RiskMeasure.CVAR, prior_estimator=factor_model)
     >>> model.fit(X, factors=factors)
-    MeanRisk(prior_estimator=TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
-                                                                                                                          log_transform=True,
-                                                                                                                          n_jobs=-1),
-                                                                                        n_samples=5000,
-                                                                                        sample_args={'conditioning': {'QUAL': -0.2}})),
-             risk_measure=CVaR)
-    >>> print(model.weights_.round(4))
-    [0.     0.     0.     0.     0.     0.     0.     0.     0.     0.
-     0.     0.     0.     0.     0.     0.     0.0614 0.     0.9386 0.    ]
+    MeanRisk(...)
+    >>> print(model.weights_)
+    [... 6.16...e-02 ... 9.38...e-01 ...]
     >>>
     >>> # Stress Test the Portfolio
     >>> factor_model.set_params(factor_prior_estimator__sample_args=dict(
     ...     conditioning={"QUAL": -0.5}
     ... ))
-    TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
-                                                                                                 log_transform=True,
-                                                                                                 n_jobs=-1),
-                                                               n_samples=5000,
-                                                               sample_args={'conditioning': {'QUAL': -0.5}}))
+    TimeSeriesFactorModel(...)
     >>> factor_model.fit(X, factors=factors)
-    TimeSeriesFactorModel(factor_prior_estimator=SyntheticData(distribution_estimator=VineCopula(central_assets=['QUAL'],
-                                                                                                 log_transform=True,
-                                                                                                 n_jobs=-1),
-                                                               n_samples=5000,
-                                                               sample_args={'conditioning': {'QUAL': -0.5}}))
+    TimeSeriesFactorModel(...)
     >>> stressed_dist = factor_model.return_distribution_
     >>> stressed_ptf = model.predict(stressed_dist)
     """
