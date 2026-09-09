@@ -12,7 +12,12 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # A fork inherits this workflow and its CI trigger, so a push to a fork's `main`
+    # reaches this job too. Without the release app secrets it only fails; with them
+    # it would tag and publish from a repository that is not the canonical one.
+    if: >-
+      ${{ github.event.workflow_run.conclusion == 'success'
+          && github.repository == 'skfolio/skfolio' }}
     concurrency: release
     permissions:
       id-token: write
