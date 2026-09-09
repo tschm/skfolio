@@ -13,6 +13,7 @@ from skfolio.moments import ImpliedCovariance
 from skfolio.optimization.convex import (
     RiskBudgeting,
 )
+from skfolio.optimization.convex import _base as convex_base
 from skfolio.preprocessing import prices_to_returns
 from skfolio.prior import EmpiricalPrior, EntropyPooling, TimeSeriesFactorModel
 
@@ -302,19 +303,20 @@ def test_risk_budgeting_negative_weight_constraints(X_small):
 def X_full():
     """The full price history, unsliced.
 
-    The CLARABEL stall these tests cover needs the whole sample: the shorter windows
-    the other fixtures use are not ill-conditioned enough to reproduce it.
+    The ill-conditioning covered below needs the whole sample: the shorter windows the
+    other fixtures use are not concentrated enough to reproduce it.
     """
     return prices_to_returns(load_sp500_dataset())
 
 
 @pytest.fixture(scope="module")
 def concentrated_prior():
-    """A prior whose `sample_weight` is concentrated enough to stall CLARABEL.
+    """A prior whose views concentrate `sample_weight` onto few scenarios.
 
-    The entropy pooling views reweight the scenarios so heavily that the CVaR risk
-    budgeting problem, though bounded and feasible, freezes CLARABEL's interior point
-    iterations in `InsufficientProgress`. See issue #292.
+    CVaR risk budgeting on this distribution is bounded and feasible, but so
+    ill-conditioned that CLARABEL 0.11 freezes with a non-zero dual residual and
+    terminates in `InsufficientProgress`. CLARABEL 0.10 solves it, so which solver
+    gets there is a property of the installed version, not of skfolio. See issue #292.
     """
     return EntropyPooling(
         mean_views=["AMD >= BAC", "JPM <= prior(JPM) * 0.8"],
@@ -322,22 +324,79 @@ def concentrated_prior():
     )
 
 
-def test_cvar_falls_back_when_clarabel_stalls(X_full, concentrated_prior):
-    """CLARABEL stalls on this problem and the retry with SCS recovers it."""
+def test_cvar_solves_on_concentrated_sample_weight(X_full, concentrated_prior):
+    """The problem must be solved, whichever solver manages it.
+
+    This used to raise `SolverError` on CLARABEL 0.11 with no way through. The
+    assertion is deliberately on the outcome and not on the retry: on CLARABEL 0.10
+    the primary solver succeeds and no fallback is needed.
+    """
     model = RiskBudgeting(
         risk_measure=RiskMeasure.CVAR, prior_estimator=concentrated_prior
     )
+    model.fit(X_full)
 
+    assert model.solver_ in ("CLARABEL", "SCS")
+    assert model.fallback_ is None
+    np.testing.assert_almost_equal(model.weights_.sum(), 1.0)
+    assert np.all(model.weights_ > 0)
+
+
+def test_failed_solve_is_retried_with_the_fallback_solver(X_small, monkeypatch):
+    """A failing primary solver is retried once, and `solver_` names the winner.
+
+    The primary failure is injected rather than provoked with an ill-conditioned
+    problem, so the test pins the retry itself and not a solver version's behaviour.
+    """
+    real_solve_once = convex_base._solve_once
+    calls = []
+
+    def failing_first_call(*args, **kwargs):
+        calls.append(kwargs["solver"])
+        if len(calls) == 1:
+            raise cp.SolverError(f"Solver '{kwargs['solver']}' failed")
+        return real_solve_once(*args, **kwargs)
+
+    monkeypatch.setattr(convex_base, "_solve_once", failing_first_call)
+
+    model = RiskBudgeting(risk_measure=RiskMeasure.CVAR)
     with pytest.warns(
         UserWarning,
         match=r"Solver 'CLARABEL' failed\. Retrying with the fallback solver 'SCS'\.",
     ):
-        model.fit(X_full)
+        model.fit(X_small)
 
+    assert calls == ["CLARABEL", "SCS"]
     assert model.solver_ == "SCS"
-    assert model.fallback_ is None
     np.testing.assert_almost_equal(model.weights_.sum(), 1.0)
-    assert np.all(model.weights_ > 0)
+
+
+def test_fallback_solver_does_not_inherit_the_primary_solver_params(
+    X_small, monkeypatch
+):
+    """`solver_params` are tuned per solver, so the retry must not reuse them.
+
+    `tol_gap_abs` is a CLARABEL key that SCS would reject.
+    """
+    real_solve_once = convex_base._solve_once
+    seen = {}
+
+    def failing_first_call(*args, **kwargs):
+        seen[kwargs["solver"]] = kwargs["solver_params"]
+        if len(seen) == 1:
+            raise cp.SolverError(f"Solver '{kwargs['solver']}' failed")
+        return real_solve_once(*args, **kwargs)
+
+    monkeypatch.setattr(convex_base, "_solve_once", failing_first_call)
+
+    model = RiskBudgeting(
+        risk_measure=RiskMeasure.CVAR, solver_params={"tol_gap_abs": 1e-9}
+    )
+    with pytest.warns(UserWarning):
+        model.fit(X_small)
+
+    assert seen["CLARABEL"] == {"tol_gap_abs": 1e-9}
+    assert seen["SCS"] == {}
 
 
 def test_solver_reports_the_primary_solver_when_it_succeeds(X_small):
@@ -348,20 +407,21 @@ def test_solver_reports_the_primary_solver_when_it_succeeds(X_small):
     assert model.solver_ == "CLARABEL"
 
 
-def test_no_fallback_when_the_solver_is_already_the_fallback(
-    X_full, concentrated_prior
-):
+def test_no_fallback_when_the_solver_is_already_the_fallback(X_small, monkeypatch):
     """Choosing the fallback solver explicitly must not retry it a second time."""
-    model = RiskBudgeting(
-        risk_measure=RiskMeasure.CVAR,
-        prior_estimator=concentrated_prior,
-        solver="SCS",
-    )
+    real_solve_once = convex_base._solve_once
+    calls = []
 
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", UserWarning)
-        model.fit(X_full)
+    def counting(*args, **kwargs):
+        calls.append(kwargs["solver"])
+        return real_solve_once(*args, **kwargs)
 
+    monkeypatch.setattr(convex_base, "_solve_once", counting)
+
+    model = RiskBudgeting(risk_measure=RiskMeasure.CVAR, solver="SCS")
+    model.fit(X_small)
+
+    assert calls == ["SCS"]
     assert model.solver_ == "SCS"
 
 
