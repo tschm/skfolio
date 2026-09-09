@@ -597,7 +597,7 @@ class OnlineGridSearch(BaseOnlineSearch):
     >>> from skfolio.prior import EmpiricalPrior
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
+    >>> X = prices_to_returns(prices).tail(504)
     >>>
     >>> model = MeanRisk(
     ...     prior_estimator=EmpiricalPrior(
@@ -618,7 +618,8 @@ class OnlineGridSearch(BaseOnlineSearch):
     >>> search.fit(X)
     OnlineGridSearch(...)
     >>> search.best_params_
-    {'prior_estimator__covariance_estimator__half_life': 40, 'prior_estimator__mu_estimator__half_life': 20}
+    {'prior_estimator__covariance_estimator__half_life': 60,
+     'prior_estimator__mu_estimator__half_life': 20}
     >>> search.best_estimator_
     MeanRisk(...)
     """
@@ -856,7 +857,7 @@ class OnlineRandomizedSearch(BaseOnlineSearch):
     >>> from skfolio.prior import EmpiricalPrior
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
+    >>> X = prices_to_returns(prices).tail(504)
     >>>
     >>> model = MeanRisk(
     ...     prior_estimator=EmpiricalPrior(
@@ -879,8 +880,8 @@ class OnlineRandomizedSearch(BaseOnlineSearch):
     >>> search.fit(X)
     OnlineRandomizedSearch(...)
     >>> search.best_params_
-    {'prior_estimator__covariance_estimator__half_life': np.float64(37.38...),
-     'prior_estimator__mu_estimator__half_life': np.float64(57.22...)}
+    {'prior_estimator__covariance_estimator__half_life': 63.31...,
+     'prior_estimator__mu_estimator__half_life': 14.18...}
     >>> search.best_estimator_
     MeanRisk(...)
     """

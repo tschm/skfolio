@@ -301,7 +301,9 @@ class EWSharpeOptimalAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     >>> from skfolio.alpha import EWSharpeOptimalAlpha, ForecastUnit
     >>> from skfolio.descriptor import EWMomentum, BookToPrice, Reversal, Passthrough
     >>>
-    >>> X = make_synthetic_characteristics()
+    >>> X = make_synthetic_characteristics(
+    ...     n_assets=100, n_observations=504, n_industries=5, random_state=0
+    ... )
     >>> rng = np.random.default_rng(0)
     >>>
     >>> # Alpha models regress forward idiosyncratic returns. In production these
@@ -325,7 +327,7 @@ class EWSharpeOptimalAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     ...     third_axis_name="factors",
     ...     third_axis_labels=["market", "beta", "size"],
     ... )
-    AssetPanel(n_observations=2520, n_assets=500, n_fields=25)
+    AssetPanel(n_observations=504, n_assets=100, n_fields=25)
     >>>
     >>> alpha_model = EWSharpeOptimalAlpha(
     ...     descriptors=[
@@ -341,16 +343,22 @@ class EWSharpeOptimalAlpha(BaseAlphaDescriptorComposition, BaseAlpha):
     ... )
     >>>
     >>> # Latest alpha forecast for the current rebalance.
-    >>> alpha_model.fit(X)
+    >>> alpha_model.fit(X[:-5])
     EWSharpeOptimalAlpha(...)
-    >>> print(alpha_model.alpha_)
+    >>> # Preview five forecasts; NaN means no forecast is available.
+    >>> print(alpha_model.alpha_[:5])
+    [ 0.00649... nan        -0.0216... 0.00358... nan]
     >>>
-    >>> # Online learning with partial_fit
+    >>> # Update with the next five observations
     >>> alpha_model.partial_fit(X[-5:])
-    >>> print(alpha_model.alpha_)
+    EWSharpeOptimalAlpha(...)
+    >>> print(alpha_model.alpha_[:5])
+    [ 0.00837... nan        -0.0341... 0.0222...  nan]
     >>>
     >>> # Historical as-of alpha forecasts with fit_transform
     >>> alphas = alpha_model.fit_transform(X)
+    >>> alphas.shape
+    (504, 100)
 
     Notes
     -----

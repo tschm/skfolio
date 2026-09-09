@@ -164,7 +164,7 @@ class CovarianceForecastEvaluation:
     >>> from skfolio.preprocessing import prices_to_returns
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
+    >>> X = prices_to_returns(prices).tail(504)
     >>> evaluation = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30),
     ...     X,
@@ -172,10 +172,10 @@ class CovarianceForecastEvaluation:
     ... )
     >>> evaluation.summary()
                                         mean  ...           target
-    Mahalanobis ratio               1.408...  ...              1.0
-    Diagonal ratio                  1.067...  ...              1.0
-    Portfolio standardized returns  0.070...  ...    mean=0, std=1
-    Portfolio QLIKE                -8.409...  ...  lower is better
+    Mahalanobis ratio               1.405...  ...              1.0
+    Diagonal ratio                  1.090...  ...              1.0
+    Portfolio standardized returns  0.010...  ...    mean=0, std=1
+    Portfolio QLIKE                -7.923...  ...  lower is better
     <BLANKLINE>
     [4 rows x 7 columns]
     >>> evaluation.plot_calibration()
@@ -537,24 +537,24 @@ class CovarianceForecastComparison:
     >>> from skfolio.preprocessing import prices_to_returns
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
-    >>> evaluatio_30 = online_covariance_forecast_evaluation(
+    >>> X = prices_to_returns(prices).tail(504)
+    >>> evaluation_30 = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=30), X, warmup_size=252,
     ... )
-    >>> evaluatio_60 = online_covariance_forecast_evaluation(
+    >>> evaluation_60 = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=60), X, warmup_size=252,
     ... )
     >>> comparison = CovarianceForecastComparison(
-    ...     [evaluatio_30, evaluatio_60],
+    ...     [evaluation_30, evaluation_60],
     ...     names=["EWCov(30)", "EWCov(60)"],
     ... )
     >>> comparison.summary()
     estimator                      EWCov(30)  ...        EWCov(60)
                                         mean  ...           target
-    Mahalanobis ratio               1.408...  ...              1.0
-    Diagonal ratio                  1.067...  ...              1.0
-    Portfolio standardized returns  0.070...  ...    mean=0, std=1
-    Portfolio QLIKE                -8.409...  ...  lower is better
+    Mahalanobis ratio               1.405...  ...              1.0
+    Diagonal ratio                  1.090...  ...              1.0
+    Portfolio standardized returns  0.010...  ...    mean=0, std=1
+    Portfolio QLIKE                -7.923...  ...  lower is better
     <BLANKLINE>
     [4 rows x 14 columns]
     >>> comparison.plot_calibration()
@@ -950,7 +950,7 @@ def covariance_forecast_evaluation(
     >>> from skfolio.preprocessing import prices_to_returns
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
+    >>> X = prices_to_returns(prices).tail(504)
     >>> evaluation = covariance_forecast_evaluation(
     ...     LedoitWolf(),
     ...     X,
@@ -959,14 +959,14 @@ def covariance_forecast_evaluation(
     ... )
     >>> evaluation.summary()
                                         mean  ...           target
-    Mahalanobis ratio               0.998...  ...              1.0
-    Diagonal ratio                  1.015...  ...              1.0
-    Portfolio standardized returns  0.155...  ...    mean=0, std=1
-    Portfolio QLIKE                -6.560...  ...  lower is better
+    Mahalanobis ratio                1.169...  ...              1.0
+    Diagonal ratio                  1.313...  ...              1.0
+    Portfolio standardized returns  0.028...  ...    mean=0, std=1
+    Portfolio QLIKE                -6.082...  ...  lower is better
     <BLANKLINE>
     [4 rows x 7 columns]
     >>> evaluation.bias_statistic
-    array([1.081...])
+    array([1.380...])
     >>> evaluation.plot_calibration()
     Figure(...)
     """

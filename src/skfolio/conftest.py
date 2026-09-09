@@ -25,14 +25,6 @@ SKIPPED = {
     "skfolio.population._population.Population.boxplot_measure": (
         "illustrative fragment: `population` is never defined"
     ),
-    "skfolio.alpha._ew_sharpe_optimal_alpha.EWSharpeOptimalAlpha": (
-        "example raises: `partial_fit(X[-5:])` re-feeds rows already seen and "
-        "`ValueError: observations must be unique`"
-    ),
-    "skfolio.alpha._predictor_alpha.PredictorAlpha": (
-        "example raises: `partial_fit(X[-5:])` re-feeds rows already seen and "
-        "`ValueError: observations must be unique`"
-    ),
     "skfolio.prior._opinion_pooling.OpinionPooling": (
         "example raises: the pooling itself fits, but `RiskBudgeting(CVaR)` on the "
         "pooled distribution hits `SolverError: Solver 'CLARABEL' failed`"
@@ -48,18 +40,30 @@ def pytest_collection_modifyitems(items) -> None:
 
 
 @pytest.fixture(autouse=True)
-def _doctest_environment(tmp_path, monkeypatch):
-    """Run every doctest under the state a reader of the published docs would have.
+def _doctest_environment(request, tmp_path, monkeypatch):
+    """Keep readable output settings and file writes local to each doctest.
 
     `tests/conftest.py` sets `np.set_printoptions(suppress=True, precision=6)` and a
     few test modules call `sklearn.set_config(...)` without restoring it. Both leak
     into whatever runs next and change how documented output renders. The temporary
     directory keeps examples that write files (`AssetPanel.save("asset_panel")`) out
-    of the working tree.
+    of the working tree. Optimizer and SyntheticData arrays use four decimal places;
+    other arrays keep eight to preserve small values. NumPy scalars
+    display as plain numbers, including inside dictionaries.
     """
     monkeypatch.chdir(tmp_path)
+    compact_arrays = request.node.name.startswith(
+        ("skfolio.optimization.", "skfolio.prior._synthetic_data.")
+    )
     with (
-        np.printoptions(precision=8, suppress=False),
+        np.printoptions(
+            precision=4 if compact_arrays else 8,
+            suppress=compact_arrays
+            or request.node.name.startswith(
+                ("skfolio.alpha.", "skfolio.prior._entropy_pooling.")
+            ),
+            legacy="1.25",
+        ),
         sklearn.config_context(transform_output="default"),
     ):
         yield

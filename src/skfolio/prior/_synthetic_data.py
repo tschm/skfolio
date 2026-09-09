@@ -101,9 +101,7 @@ class SyntheticData(BasePrior):
     >>> model.fit(X)
     MeanRisk(...)
     >>> print(model.weights_)
-    [2.07...e-03 ... 3.87...e-02 9.37...e-03 1.94...e-01 9.79...e-02
-     1.05...e-01 ... 1.02...e-01 1.02...e-02 6.91...e-02 ... 1.49...e-01 ...
-     1.55...e-01 6.40...e-02]
+    [0.0021 0.     0.     ... 0.     0.1559 0.0641]
     >>>
     >>> # Minimum CVaR optimization on Stressed Factors
     >>> factor_model = TimeSeriesFactorModel(
@@ -122,7 +120,7 @@ class SyntheticData(BasePrior):
     >>> model.fit(X, factors=factors)
     MeanRisk(...)
     >>> print(model.weights_)
-    [... 6.16...e-02 ... 9.38...e-01 ...]
+    [0.     0.     0.     ... 0.0616 0.     0.9384 0.    ]
     >>>
     >>> # Stress Test the Portfolio
     >>> factor_model.set_params(factor_prior_estimator__sample_args=dict(

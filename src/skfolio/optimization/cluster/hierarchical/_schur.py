@@ -289,9 +289,7 @@ class SchurComplementary(BaseHierarchicalOptimization):
     >>> model.fit(X)
     SchurComplementary()
     >>> print(model.weights_)
-    [0.0358... 0.00613... 0.0261... 0.00932... 0.0290... 0.0265... 0.0373...
-     0.136... 0.0319... 0.136... 0.0195... 0.0243... 0.0255... 0.0707...
-     0.0410... 0.135... 0.00488... 0.0425... 0.112... 0.0480...]
+    [0.0358 0.0061 0.0262 ... 0.0426 0.1129 0.048 ]
     >>>
     >>> # Advanced model:
     >>> #    * Ledoit-Wolf covariance shrinkage
@@ -308,9 +306,7 @@ class SchurComplementary(BaseHierarchicalOptimization):
     >>> model.fit(X)
     SchurComplementary(...)
     >>> print(model.weights_)
-    [0.0322... 0.00947... 0.0234... 0.0244... 0.0393... 0.0565... 0.0365...
-     0.0657... 0.0395... 0.0993... 0.0665... 0.0429... 0.0482... 0.0895...
-     0.0740... 0.0926... 0.00712... 0.0402... 0.0514... 0.0604...]
+    [0.0323 0.0095 0.0234 ... 0.0402 0.0515 0.0605]
     """
 
     effective_gamma_: float

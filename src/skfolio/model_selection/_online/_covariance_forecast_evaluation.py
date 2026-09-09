@@ -151,7 +151,7 @@ def online_covariance_forecast_evaluation(
     >>> from skfolio.preprocessing import prices_to_returns
     >>>
     >>> prices = load_sp500_dataset()
-    >>> X = prices_to_returns(prices)
+    >>> X = prices_to_returns(prices).tail(504)
     >>> evaluation = online_covariance_forecast_evaluation(
     ...     EWCovariance(half_life=60),
     ...     X,
@@ -160,14 +160,14 @@ def online_covariance_forecast_evaluation(
     ... )
     >>> evaluation.summary()
                                         mean  ...           target
-    Mahalanobis ratio               1.190...  ...              1.0
-    Diagonal ratio                  1.031...  ...              1.0
-    Portfolio standardized returns  0.148...  ...    mean=0, std=1
-    Portfolio QLIKE                -6.705...  ...  lower is better
+    Mahalanobis ratio               1.353...  ...              1.0
+    Diagonal ratio                  1.199...  ...              1.0
+    Portfolio standardized returns  0.027...  ...    mean=0, std=1
+    Portfolio QLIKE                -6.260...  ...  lower is better
     <BLANKLINE>
     [4 rows x 7 columns]
     >>> evaluation.bias_statistic
-    array([1.008...])
+    array([1.224...])
     >>> evaluation.plot_calibration()
     Figure(...)
     """
