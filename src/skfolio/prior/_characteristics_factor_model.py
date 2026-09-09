@@ -28,7 +28,7 @@ from skfolio._constants import (
     _RETURNS,
 )
 from skfolio.alpha import BaseAlpha
-from skfolio.base import BaseComposition, validate_asset_panel
+from skfolio.base import BaseComposition
 from skfolio.containers import AssetPanel, InactivePolicy
 from skfolio.factor_exposure import BaseFactorExposure, DerivedFactor
 from skfolio.linear_model import BaseCSLinearModel, CSLinearRegression
@@ -66,6 +66,7 @@ from skfolio.utils.tools import (
     call_asset_panel_transform,
     check_estimator,
 )
+from skfolio.utils.validation import validate_asset_panel
 
 _FITTED_ATTR = "factor_model_"
 

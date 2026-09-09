@@ -8,13 +8,13 @@ from __future__ import annotations
 
 import numpy as np
 
-from skfolio.base import validate_asset_panel
 from skfolio.containers import AssetPanel
 from skfolio.descriptor._base import BaseDescriptor
 from skfolio.typing import FloatArray
 from skfolio.utils._array_buffer import _update_buffer
 from skfolio.utils.stats import safe_divide
 from skfolio.utils.tools import _validate_positive_integer
+from skfolio.utils.validation import validate_asset_panel
 
 _FITTED_ATTR = "change_in_intensity_"
 
