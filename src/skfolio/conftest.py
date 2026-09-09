@@ -34,7 +34,8 @@ SKIPPED = {
         "`ValueError: observations must be unique`"
     ),
     "skfolio.prior._opinion_pooling.OpinionPooling": (
-        "example raises: `SolverError: Solver 'CLARABEL' failed`"
+        "example raises: the pooling itself fits, but `RiskBudgeting(CVaR)` on the "
+        "pooled distribution hits `SolverError: Solver 'CLARABEL' failed`"
     ),
 }
 
