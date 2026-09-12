@@ -22,13 +22,7 @@ __all__ = [
 
 
 class SkfolioError(Exception):
-    """Base class for every error raised by skfolio.
-
-    Catching this catches any error the library raises on purpose, which is what a
-    caller wants when a single failure should not stop a wider run -- a backtest loop
-    or a scheduled job skipping one period and carrying on -- while still letting
-    genuine bugs propagate.
-    """
+    """Base class for all custom skfolio exceptions."""
 
 
 class OptimizationError(SkfolioError):
